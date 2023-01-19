@@ -31,11 +31,6 @@ body {
     font-size: 45px;
 }
 
-ul {
-    margin-top: 114px;
-    width: 100%;
-}
-
 .esconder{
     display: none;
 }
@@ -63,6 +58,8 @@ li {
 }
 
 ul {
+    margin-top: 106px;
+    width: 100%;
     margin-bottom: 100px;
 }
 

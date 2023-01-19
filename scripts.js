@@ -1,11 +1,44 @@
 let nome;
+let horarioMsg;
+let nomeA;
+let nomeB;
+let textoMsg;
+let estrutura = "";
+let ultimaMSG;
+let paraQuem = "Todos";
+let tipo = "message"
+
+
+function sendOk(){
+    const pegarMensagens = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
+
+    pegarMensagens.then(mensagensOk);
+    pegarMensagens.catch(mensagensErro);
+}
+
+function sendErro(){
+    alert('Houve um erro ao enviar a mensagem. Você será reconectado(a)!')
+    window.location.reload();
+}
+
+function sendMsg(){
+
+    let inputdoc = document.querySelector('.mensagem');
+    console.log(inputdoc.value);
+
+    let conteudo = {from: nome, to: paraQuem, text: inputdoc.value, type: tipo};
+    const sending = axios.post('https://mock-api.driven.com.br/api/v6/uol/messages',conteudo);
+
+    sending.then(sendOk);
+    sending.catch(sendErro);
+}
 
 function statusErro() {
     alert('Conexão com erro. Conecte novamente.');
     entrarNaSala();
 }
 function statusOk(confereStatus) {
-    console.log(confereStatus);
+    
 }
 
 function meustatus(){
@@ -18,35 +51,44 @@ function meustatus(){
 setInterval(meustatus, 5000);
 
 function mensagensOk(pegarMsgs){
-    console.log(pegarMsgs);
+
+    let elementos = "";
 
     for (let i = 0; i < pegarMsgs.data.length; i++){
-        let horarioMsg = pegarMsgs.data[i].time;
-        let nomeA = pegarMsgs.data[i].from;
-        let nomeB = pegarMsgs.data[i].to;
-        let textoMsg = pegarMsgs.data[i].text;
+        horarioMsg = pegarMsgs.data[i].time;
+        nomeA = pegarMsgs.data[i].from;
+        nomeB = pegarMsgs.data[i].to;
+        textoMsg = pegarMsgs.data[i].text;
+
+        estrutura = document.querySelector('ul');
 
         if (textoMsg === "entra na sala..." || textoMsg === "sai da sala..."){
-            document.querySelector('ul').innerHTML = `
+            elementos = elementos+`
             <li class="entrou-saiu">
                 <p class="texto"><span class="hora">(${horarioMsg})</span><span>${nomeA}</span> ${textoMsg}</p>
             </li>
-            ` + document.querySelector('ul').innerHTML;
+            `;
         } else if (nomeB === "Todos"){
-            document.querySelector('ul').innerHTML = `
+            elementos = elementos+`
             <li class="msg">
                 <p class="texto"><span class="hora">(${horarioMsg})</span><span>${nomeA}</span> para <span>${nomeB}</span>: ${textoMsg}</p>
             </li>
-            ` + document.querySelector('ul').innerHTML;
+            `;
         } else {
-            document.querySelector('ul').innerHTML = `
-            <li class="reservado">
-                <p class="texto"><span class="hora">(${horarioMsg})</span><span>${nomeA}</span> reservadamente para <span>${nomeB}</span>: ${textoMsg}</p>
-            </li>
-            ` + document.querySelector('ul').innerHTML;
+            if (nomeB === nome){
+                elementos = elementos+`
+                <li class="reservado">
+                    <p class="texto"><span class="hora">(${horarioMsg})</span><span>${nomeA}</span> reservadamente para <span>${nomeB}</span>: ${textoMsg}</p>
+                </li>
+                `;
+                elementos
+            }
         }
+        estrutura.innerHTML = elementos;
+        document.querySelector('ul').scrollIntoView({block: "end", behavior: "instant", inline: "end"});
     }
 }
+
 
 function mensagensErro(){
     alert('Erro ao exibir mensagens. Entre na sala novamente.');
@@ -54,7 +96,6 @@ function mensagensErro(){
 }
 
 function mostrarSala(){
-    document.querySelector('ul').classList.remove('esconder');
 
     const pegarMensagens = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
 
@@ -70,6 +111,7 @@ function processaRespostaErro(erro){
 
 function processaResposta(resposta){
     alert('Seja bem vindo(a) ao Bate Papo UOL!');
+    document.querySelector('ul').classList.remove('esconder');
     setInterval(mostrarSala,3000);
 }
 
