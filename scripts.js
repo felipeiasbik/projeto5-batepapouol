@@ -26,22 +26,22 @@ function mensagensOk(pegarMsgs){
         let nomeB = pegarMsgs.data[i].to;
         let textoMsg = pegarMsgs.data[i].text;
 
-        if (textoMsg === "entra na sala..."){
+        if (textoMsg === "entra na sala..." || textoMsg === "sai da sala..."){
             document.querySelector('ul').innerHTML = `
             <li class="entrou-saiu">
-                <p class="texto"><span class="hora">(09:21:48)</span><span>${nomeA}</span> ${textoMsg}</p>
+                <p class="texto"><span class="hora">(${horarioMsg})</span><span>${nomeA}</span> ${textoMsg}</p>
             </li>
             ` + document.querySelector('ul').innerHTML;
         } else if (nomeB === "Todos"){
             document.querySelector('ul').innerHTML = `
             <li class="msg">
-                <p class="texto"><span class="hora">(09:21:48)</span><span>${nomeA}</span> para <span>${nomeB}</span>: ${textoMsg}</p>
+                <p class="texto"><span class="hora">(${horarioMsg})</span><span>${nomeA}</span> para <span>${nomeB}</span>: ${textoMsg}</p>
             </li>
             ` + document.querySelector('ul').innerHTML;
         } else {
             document.querySelector('ul').innerHTML = `
             <li class="reservado">
-                <p class="texto"><span class="hora">(09:21:48)</span><span>${nomeA}</span> reservadamente para <span>${nomeB}</span>: ${textoMsg}</p>
+                <p class="texto"><span class="hora">(${horarioMsg})</span><span>${nomeA}</span> reservadamente para <span>${nomeB}</span>: ${textoMsg}</p>
             </li>
             ` + document.querySelector('ul').innerHTML;
         }
