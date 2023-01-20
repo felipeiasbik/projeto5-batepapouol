@@ -120,7 +120,11 @@ input:focus {
     outline: 0;
 }
 
-.rodape ion-icon{
+.rodape button{
     margin-right: 18px;
+    border: 0;
+    background-color: #ffffff;
+}
+.rodape ion-icon{
     font-size: 30px;
 }

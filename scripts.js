@@ -28,22 +28,22 @@ function mensagensOk(pegarMsgs){
 
         estrutura = document.querySelector('ul');
 
-        if (textoMsg === "entra na sala..." || textoMsg === "sai da sala..."){
+        if (pegarMsgs.data[i].type === "status"){
             elementos = elementos+`
-            <li class="entrou-saiu">
+            <li class="entrou-saiu" data-test="message">
                 <p class="texto"><span class="hora">(${horarioMsg})</span><span>${nomeA}</span> ${textoMsg}</p>
             </li>
             `;
-        } else if (nomeB === "Todos"){
+        } else if (pegarMsgs.data[i].type === "message"){
             elementos = elementos+`
-            <li class="msg">
+            <li class="msg" data-test="message">
                 <p class="texto"><span class="hora">(${horarioMsg})</span><span>${nomeA}</span> para <span>${nomeB}</span>: ${textoMsg}</p>
             </li>
             `;
         } else {
             if (nomeB === nome){
                 elementos = elementos+`
-                <li class="reservado">
+                <li class="reservado" data-test="message">
                     <p class="texto"><span class="hora">(${horarioMsg})</span><span>${nomeA}</span> reservadamente para <span>${nomeB}</span>: ${textoMsg}</p>
                 </li>
                 `;
@@ -54,6 +54,7 @@ function mensagensOk(pegarMsgs){
     if (comparaNovo[0] !== horarioMsg && comparaNovo[1] !== nomeA && comparaNovo[2] !== textoMsg){
         estrutura.innerHTML = elementos;
         document.querySelector('ul li:last-child').scrollIntoView();
+        console.log(pegarMsgs);
         comparaNovo[0]=pegarMsgs.data[99].time;
         comparaNovo[1]=pegarMsgs.data[99].from;
         comparaNovo[2]=pegarMsgs.data[99].text;
@@ -114,7 +115,7 @@ function meustatus(){
 }
 
 function processaRespostaErro(erro){
-    alert('Nome já está em uso. Por favor, digite um outro nome.');
+    alert('Este nome já está em uso. Por favor, digite um outro nome.');
     entrarNaSala();
 }
 
