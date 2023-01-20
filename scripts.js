@@ -6,52 +6,18 @@ let textoMsg;
 let estrutura = "";
 let ultimaMSG;
 let paraQuem = "Todos";
-let tipo = "message"
+let tipo = "message";
+let comparaNovo = [];
 
-
-function sendOk(){
-    const pegarMensagens = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
-
-    pegarMensagens.then(mensagensOk);
-    pegarMensagens.catch(mensagensErro);
-}
-
-function sendErro(){
-    alert('Houve um erro ao enviar a mensagem. Você será reconectado(a)!')
-    window.location.reload();
-}
-
-function sendMsg(){
-
-    let inputdoc = document.querySelector('.mensagem');
-    console.log(inputdoc.value);
-
-    let conteudo = {from: nome, to: paraQuem, text: inputdoc.value, type: tipo};
-    const sending = axios.post('https://mock-api.driven.com.br/api/v6/uol/messages',conteudo);
-
-    sending.then(sendOk);
-    sending.catch(sendErro);
-}
-
-function statusErro() {
-    alert('Conexão com erro. Conecte novamente.');
+function mensagensErro(){
+    alert('Erro ao exibir mensagens. Entre na sala novamente.');
     entrarNaSala();
 }
-function statusOk(confereStatus) {
-    
-}
-
-function meustatus(){
-    const testeStatus = axios.post('https://mock-api.driven.com.br/api/v6/uol/status', {name: nome});
-
-    testeStatus.then(statusOk);
-    testeStatus.catch(statusErro);
-}
-
-setInterval(meustatus, 5000);
 
 function mensagensOk(pegarMsgs){
 
+    document.querySelector('ul').classList.remove('esconder');
+    
     let elementos = "";
 
     for (let i = 0; i < pegarMsgs.data.length; i++){
@@ -84,15 +50,42 @@ function mensagensOk(pegarMsgs){
                 elementos
             }
         }
+    }
+    if (comparaNovo[0] !== horarioMsg && comparaNovo[1] !== nomeA && comparaNovo[2] !== textoMsg){
         estrutura.innerHTML = elementos;
-        document.querySelector('ul').scrollIntoView({block: "end", behavior: "instant", inline: "end"});
+        document.querySelector('ul li:last-child').scrollIntoView();
+        comparaNovo[0]=pegarMsgs.data[99].time;
+        comparaNovo[1]=pegarMsgs.data[99].from;
+        comparaNovo[2]=pegarMsgs.data[99].text;
     }
 }
 
+function sendOk(){
+    const pegarMensagens = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
 
-function mensagensErro(){
-    alert('Erro ao exibir mensagens. Entre na sala novamente.');
-    entrarNaSala();
+    pegarMensagens.then(mensagensOk);
+    pegarMensagens.catch(mensagensErro);
+}
+
+function sendErro(){
+    alert('Houve um erro ao enviar a mensagem. Você será reconectado(a)!')
+    window.location.reload();
+}
+
+function sendMsg(){
+
+    let conteudoMsg = {
+        from: nome,
+        to: paraQuem,
+        text: document.querySelector('input').value,
+        type: tipo
+    };
+    const sending = axios.post('https://mock-api.driven.com.br/api/v6/uol/messages',conteudoMsg);
+    
+    sending.then(sendOk);
+    sending.catch(sendErro);
+
+    document.querySelector("input").value = "";
 }
 
 function mostrarSala(){
@@ -104,14 +97,31 @@ function mostrarSala(){
 
 }
 
+function statusErro() {
+    alert(nome+', você perdeu conexão. Entre novamente no chat.');
+    entrarNaSala();
+}
+
+function statusOk(confereStatus) {
+    console.log(nome+' segue conectado ao bate papo.');
+}
+
+function meustatus(){
+    const testeStatus = axios.post('https://mock-api.driven.com.br/api/v6/uol/status', {name: nome});
+
+    testeStatus.then(statusOk);
+    testeStatus.catch(statusErro);
+}
+
 function processaRespostaErro(erro){
     alert('Nome já está em uso. Por favor, digite um outro nome.');
     entrarNaSala();
 }
 
 function processaResposta(resposta){
-    alert('Seja bem vindo(a) ao Bate Papo UOL!');
-    document.querySelector('ul').classList.remove('esconder');
+    console.log(nome +' entrou na sala!')
+
+    setInterval(meustatus, 5000);
     setInterval(mostrarSala,3000);
 }
 
