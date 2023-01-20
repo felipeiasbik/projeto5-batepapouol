@@ -8,6 +8,7 @@ let ultimaMSG;
 let paraQuem = "Todos";
 let tipo = "message";
 let comparaNovo = [];
+let conteudoMsg;
 
 function mensagensErro(){
     alert('Erro ao exibir mensagens. Entre na sala novamente.');
@@ -15,8 +16,6 @@ function mensagensErro(){
 }
 
 function mensagensOk(pegarMsgs){
-
-    document.querySelector('ul').classList.remove('esconder');
     
     let elementos = "";
 
@@ -75,7 +74,7 @@ function sendErro(){
 
 function sendMsg(){
 
-    let conteudoMsg = {
+        conteudoMsg = {
         from: nome,
         to: paraQuem,
         text: document.querySelector('input').value,
@@ -88,6 +87,19 @@ function sendMsg(){
 
     document.querySelector("input").value = "";
 }
+
+document.addEventListener("keypress", function (e){
+
+    if (e.key === "Enter") {
+
+        const btn = document.querySelector('.sendbtn')
+        btn.click();
+
+        document.querySelector("input").value = "";
+        sendOk();
+
+    }
+});
 
 function mostrarSala(){
 
@@ -121,6 +133,7 @@ function processaRespostaErro(erro){
 
 function processaResposta(resposta){
     console.log(nome +' entrou na sala!')
+    document.querySelector('ul').classList.remove('esconder');
 
     setInterval(meustatus, 5000);
     setInterval(mostrarSala,3000);
