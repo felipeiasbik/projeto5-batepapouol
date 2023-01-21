@@ -9,6 +9,7 @@ let paraQuem = "Todos";
 let tipo = "message";
 let comparaNovo = [];
 let conteudoMsg;
+let elementos = "";
 
 function mensagensErro(){
     alert('Erro ao exibir mensagens. Entre na sala novamente.');
@@ -17,7 +18,8 @@ function mensagensErro(){
 
 function mensagensOk(pegarMsgs){
     
-    let elementos = "";
+    elementos = "";
+    console.log('Limpando as mensagens...');
 
     for (let i = 0; i < pegarMsgs.data.length; i++){
         horarioMsg = pegarMsgs.data[i].time;
@@ -26,7 +28,6 @@ function mensagensOk(pegarMsgs){
         textoMsg = pegarMsgs.data[i].text;
 
         estrutura = document.querySelector('ul');
-
         if (pegarMsgs.data[i].type === "status"){
             elementos = elementos+`
             <li class="entrou-saiu" data-test="message">
@@ -52,7 +53,6 @@ function mensagensOk(pegarMsgs){
     if (comparaNovo[0] !== horarioMsg || comparaNovo[1] !== nomeA || comparaNovo[2] !== textoMsg){
         estrutura.innerHTML = elementos;
         document.querySelector('ul li:last-child').scrollIntoView();
-        console.log(pegarMsgs);
         comparaNovo[0]=pegarMsgs.data[99].time;
         comparaNovo[1]=pegarMsgs.data[99].from;
         comparaNovo[2]=pegarMsgs.data[99].text;
@@ -61,6 +61,7 @@ function mensagensOk(pegarMsgs){
 
 function sendOk(){
     const pegarMensagens = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
+    console.log(nome+' enviou mensagem!')
 
     pegarMensagens.then(mensagensOk);
     pegarMensagens.catch(mensagensErro);
@@ -95,7 +96,6 @@ document.addEventListener("keypress", function (e){
         btn.click();
 
         document.querySelector("input").value = "";
-        sendOk();
 
     }
 });
@@ -103,6 +103,7 @@ document.addEventListener("keypress", function (e){
 function mostrarSala(){
 
     const pegarMensagens = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
+    console.log('Atualizando a sala!')
 
     pegarMensagens.then(mensagensOk);
     pegarMensagens.catch(mensagensErro);
@@ -134,6 +135,12 @@ function processaResposta(resposta){
     console.log(nome +' entrou na sala!')
     document.querySelector('ul').classList.remove('esconder');
 
+    const pegarMensagens = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
+    console.log('Exibindo histórico de mensagens!')
+
+    pegarMensagens.then(mensagensOk);
+    pegarMensagens.catch(mensagensErro);
+    
     setInterval(meustatus, 5000);
     setInterval(mostrarSala,3000);
 }
