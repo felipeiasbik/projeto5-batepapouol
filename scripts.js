@@ -46,11 +46,10 @@ function mensagensOk(pegarMsgs){
                     <p class="texto"><span class="hora">(${horarioMsg})</span><span>${nomeA}</span> reservadamente para <span>${nomeB}</span>: ${textoMsg}</p>
                 </li>
                 `;
-                elementos
             }
         }
     }
-    if (comparaNovo[0] !== horarioMsg && comparaNovo[1] !== nomeA && comparaNovo[2] !== textoMsg){
+    if (comparaNovo[0] !== horarioMsg || comparaNovo[1] !== nomeA || comparaNovo[2] !== textoMsg){
         estrutura.innerHTML = elementos;
         document.querySelector('ul li:last-child').scrollIntoView();
         console.log(pegarMsgs);
