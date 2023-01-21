@@ -73,19 +73,23 @@ function sendErro(){
 }
 
 function sendMsg(){
-
-        conteudoMsg = {
+    
+    conteudoMsg = {
         from: nome,
         to: paraQuem,
-        text: document.querySelector('input').value,
+        text: document.querySelector('.rodape input').value,
         type: tipo
     };
+
+    if (document.querySelector('.rodape input').value !== ''){
+
     const sending = axios.post('https://mock-api.driven.com.br/api/v6/uol/messages',conteudoMsg);
     
     sending.then(sendOk);
     sending.catch(sendErro);
 
-    document.querySelector("input").value = "";
+    document.querySelector(".rodape input").value = "";
+    }
 }
 
 document.addEventListener("keypress", function (e){
@@ -95,7 +99,7 @@ document.addEventListener("keypress", function (e){
         const btn = document.querySelector('.sendbtn')
         btn.click();
 
-        document.querySelector("input").value = "";
+        document.querySelector(".rodape input").value = "";
 
     }
 });

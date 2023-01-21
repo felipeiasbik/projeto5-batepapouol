@@ -1,28 +1,34 @@
 <!DOCTYPE html>
 <html lang="pt_BR">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bate-Papo UOL</title>
-    <link rel="stylesheet" href="reset.css" />
-    <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-    <div class="cabecalho">
-        <img alt="Logo Bate-Papo UOL" src="img/logo.png">
-        <ion-icon name="people"></ion-icon>
-    </div>
-    <ul class="esconder">
-        
-    </ul>
-    <div class="rodape">
-        <input type="text" lass="mensagem" placeholder="Escreva aqui..." onfocus="this.value='';" data-test="input-message">
-        <button data-test="send-message" class="sendbtn" onclick="sendMsg()"><ion-icon name="paper-plane-outline"></ion-icon></button>
-    </div>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-<script src="scripts.js"></script>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Bate-Papo UOL</title>
+        <link rel="stylesheet" href="reset.css" />
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <!--
+        <div class="tela-entrada">
+        <input type="text" placeholder="Escreva aqui..." onfocus="this.value='';" data-test="input-name">
+        //<button data-test="send-name" class="sendbtn" onclick="sendMsg()"><ion-icon name="paper-plane-outline"></ion-icon></button>
+        </div>
+        -->
+        <div class="cabecalho">
+            <img alt="Logo Bate-Papo UOL" src="img/logo.png">
+            <ion-icon name="people"></ion-icon>
+        </div>
+        <ul class="esconder">
+            
+        </ul>
+        <div class="rodape">
+            <input type="text" required="required" placeholder="Escreva aqui..." onfocus="this.value='';" data-test="input-message">
+            <button data-test="send-message" class="sendbtn" onclick="sendMsg()"><ion-icon name="paper-plane-outline"></ion-icon></button>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+        <script src="scripts.js"></script>
+    </body>
 </html>
