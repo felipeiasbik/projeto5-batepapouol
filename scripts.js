@@ -142,6 +142,9 @@ function processaRespostaErro(erro){
 }
 
 function processaResposta(resposta){
+
+    document.querySelector('.tela-entrada').classList.add('esconder');
+
     console.log(nome +' entrou na sala!')
     document.querySelector('ul').classList.remove('esconder');
 
@@ -156,7 +159,7 @@ function processaResposta(resposta){
 }
 
 function entrarNaSala(){
-    nome = prompt('Qual é o seu nome?');
+    //nome = prompt('Qual é o seu nome?');
     const promise = axios.post('https://mock-api.driven.com.br/api/v6/uol/participants', {name: nome});
 
     promise.then(processaResposta);
@@ -164,4 +167,17 @@ function entrarNaSala(){
 
 }
 
-entrarNaSala();
+function telaInicial(){
+
+    nome = document.querySelector('.tela-entrada input').value;
+
+    if (nome === ' ' || nome === '  ' || nome === '   ' || nome === '    ' || nome === '     '){
+        nome = "";
+    }
+
+    if (nome!== ''){
+        document.querySelector('.tela-entrada input').value = "";
+        entrarNaSala();
+    }
+
+}
