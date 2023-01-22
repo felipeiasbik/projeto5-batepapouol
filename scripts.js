@@ -73,22 +73,28 @@ function sendErro(){
 }
 
 function sendMsg(){
-    
+
+    const btnSendMsg = document.querySelector('.rodape input');
+        
     conteudoMsg = {
         from: nome,
         to: paraQuem,
-        text: document.querySelector('.rodape input').value,
+        text: btnSendMsg.value,
         type: tipo
     };
 
-    if (document.querySelector('.rodape input').value !== ''){
+    if (btnSendMsg.value === ' ' || btnSendMsg.value === '  ' || btnSendMsg.value === '   ' || btnSendMsg.value === '    ' || btnSendMsg.value === '     '){
+        btnSendMsg.value = "";
+    }
 
-    const sending = axios.post('https://mock-api.driven.com.br/api/v6/uol/messages',conteudoMsg);
-    
-    sending.then(sendOk);
-    sending.catch(sendErro);
+    if (btnSendMsg.value !== ''){
+        
+        const sending = axios.post('https://mock-api.driven.com.br/api/v6/uol/messages',conteudoMsg);
+        
+        sending.then(sendOk);
+        sending.catch(sendErro);
 
-    document.querySelector(".rodape input").value = "";
+        btnSendMsg.value = "";
     }
 }
 
