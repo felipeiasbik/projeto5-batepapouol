@@ -207,7 +207,7 @@ function falhaListaUser(){
 function mostrarListaUser(usersOnline){
     const mostraUser = usersOnline.data;
     const montaListaUser = document.querySelector('.donline ul');
-    console.log(mostraUser);
+    console.log('Atualizando Lista de usuários online');
 
     montaListaUser.innerHTML = `
     <li onclick="selecionarUsuario(this)" data-test="all">
