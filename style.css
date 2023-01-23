@@ -161,6 +161,7 @@ body {
     overflow-x: scroll;
     -ms-overflow-style: none;
     scrollbar-width: none;
+    word-break: normal;
 }
 
 .left{
@@ -270,9 +271,7 @@ li {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    overflow-x: scroll;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+    word-break: break-all;
 }
 
 li::-webkit-scrollbar  {
