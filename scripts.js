@@ -8,9 +8,10 @@ let estrutura = "";
 let ultimaMSG;
 let paraQuem = "Todos";
 let tipo = "message";
-let comparaNovo = [];
+const comparaNovo = [];
 let conteudoMsg;
 let elementos = "";
+let pegarMensagens;
 
 function mensagensErro(){
     alert('Erro ao exibir mensagens. Entre na sala novamente.');
@@ -18,7 +19,7 @@ function mensagensErro(){
 }
 
 function mensagensOk(pegarMsgs){
-    console.log(pegarMsgs.data);
+    
     elementos = "";
     console.log('Limpando as mensagens...');
 
@@ -61,7 +62,7 @@ function mensagensOk(pegarMsgs){
 }
 
 function sendOk(){
-    const pegarMensagens = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
+    pegarMensagens = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
     console.log(nome+' enviou mensagem!')
 
     pegarMensagens.then(mensagensOk);
@@ -69,15 +70,15 @@ function sendOk(){
 }
 
 function sendErro(){
-    alert('Houve um erro ao enviar a mensagem. Você será reconectado(a)!')
+    alert('Houve um erro ao enviar a mensagem. Você será reconectado(a)!');
     window.location.reload();
 }
 
 function sendMsg(){
 
     const btnSendMsg = document.querySelector('.rodape input');
-    
-    if (tipo == "private_message" && paraQuem === "Todos"){
+
+    if (tipo === "private_message" && paraQuem === "Todos"){
         alert('Não é possível enviar mensagem reservada para todos');
         return;
     }
@@ -89,14 +90,14 @@ function sendMsg(){
         type: tipo
     };
 
-    if (btnSendMsg.value === ' ' || btnSendMsg.value === '  ' || btnSendMsg.value === '   ' || btnSendMsg.value === '    ' || btnSendMsg.value === '     '){
+    if (btnSendMsg.value === ' ' || btnSendMsg.value === '  ' || btnSendMsg.value === '   ' || btnSendMsg.value === '    ' ){
         btnSendMsg.value = "";
     }
 
     if (btnSendMsg.value !== ''){
-        
+
         const sending = axios.post('https://mock-api.driven.com.br/api/v6/uol/messages',conteudoMsg);
-        
+
         sending.then(sendOk);
         sending.catch(sendErro);
 
@@ -108,7 +109,7 @@ document.addEventListener("keypress", function (e){
 
     if (e.key === "Enter") {
 
-        const btn = document.querySelector('.sendbtn')
+        const btn = document.querySelector('.sendbtn');
         btn.click();
 
         document.querySelector(".rodape input").value = "";
@@ -118,8 +119,8 @@ document.addEventListener("keypress", function (e){
 
 function mostrarSala(){
 
-    const pegarMensagens = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
-    console.log('Atualizando a sala!')
+    pegarMensagens = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
+    console.log('Atualizando a sala!');
 
     pegarMensagens.then(mensagensOk);
     pegarMensagens.catch(mensagensErro);
@@ -131,7 +132,7 @@ function statusErro() {
     entrarNaSala();
 }
 
-function statusOk(confereStatus) {
+function statusOk() {
     console.log(nome+' segue conectado ao bate papo.');
 }
 
@@ -142,31 +143,31 @@ function meustatus(){
     testeStatus.catch(statusErro);
 }
 
-function processaRespostaErro(erro){
+function processaRespostaErro(){
     alert('Este nome já está em uso. Por favor, digite um outro nome.');
     window.location.reload();
 }
 
-function processaResposta(resposta){
+function processaResposta(){
 
     document.querySelector('.tela-entrada').classList.add('esconder');
 
-    console.log(nome +' entrou na sala!')
+    console.log(nome +' entrou na sala!');
     document.querySelector('.mensagenschat').classList.remove('esconder');
 
-    const pegarMensagens = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
-    console.log('Exibindo histórico de mensagens!')
+    pegarMensagens = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
+    console.log('Exibindo histórico de mensagens!');
 
     pegarMensagens.then(mensagensOk);
     pegarMensagens.catch(mensagensErro);
-    
+
     setInterval(meustatus, 5000);
     setInterval(mostrarSala,3000);
     setInterval(userOn,10000);
 }
 
 function entrarNaSala(){
-    //nome = prompt('Qual é o seu nome?');
+    
     const promise = axios.post('https://mock-api.driven.com.br/api/v6/uol/participants', {name: nome});
 
     document.querySelector('.tela-entrada button').classList.add('esconder');
@@ -182,7 +183,7 @@ function telaInicial(){
 
     nome = document.querySelector('.tela-entrada input').value;
 
-    if (nome === ' ' || nome === '  ' || nome === '   ' || nome === '    ' || nome === '     '){
+    if (nome === ' ' || nome === '  ' || nome === '   ' || nome === '    '){
         nome = "";
     }
 
@@ -204,8 +205,8 @@ function falhaListaUser(){
 }
 
 function mostrarListaUser(usersOnline){
-    let mostraUser = usersOnline.data;
-    let montaListaUser = document.querySelector('.donline ul');
+    const mostraUser = usersOnline.data;
+    const montaListaUser = document.querySelector('.donline ul');
     console.log(mostraUser);
 
     montaListaUser.innerHTML = `
@@ -220,7 +221,7 @@ function mostrarListaUser(usersOnline){
     </li>`;
 
     for (let i = 0; i < mostraUser.length; i++){
-        let nomeUserOnline = usersOnline.data[i].name;
+        const nomeUserOnline = usersOnline.data[i].name;
         if (nomeUserOnline !== nome){
         montaListaUser.innerHTML = montaListaUser.innerHTML + `
         <li onclick="selecionarUsuario(this)" data-test="participant">
@@ -232,13 +233,13 @@ function mostrarListaUser(usersOnline){
                 <ion-icon data-test="check" name="checkmark-sharp"></ion-icon>
             </div>
         </li>
-        `
+        `;
         }
     }
 }
 
 function userOn(){
-    
+
     const usuarioson = axios.get('https://mock-api.driven.com.br/api/v6/uol/participants');
 
     usuarioson.then(mostrarListaUser);
@@ -259,7 +260,7 @@ function selecionarVisibilidade(selecaoVisivel){
 
     if (selecaoAntes !== null){
         selecaoAntes.classList.remove('selecionado');
-    };
+    }
 
     visibili = selecaoVisivel.querySelector('span').innerHTML;
 
@@ -273,13 +274,13 @@ function selecionarUsuario(selecaoUsuario){
 
     if (selecaoAntes !== null){
         selecaoAntes.classList.remove('selecionado');
-    };
+    }
 
     selecaoUsuario.querySelector('.right').classList.add('selecionado');
 
     paraQuem = selecaoUsuario.querySelector('span').innerHTML;
     nomeRodape();
-    
+
 }
 
 function nomeRodape(){
