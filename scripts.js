@@ -3,6 +3,7 @@ let horarioMsg;
 let nomeA;
 let nomeB;
 let textoMsg;
+let visibili = "Público";
 let estrutura = "";
 let ultimaMSG;
 let paraQuem = "Todos";
@@ -17,7 +18,7 @@ function mensagensErro(){
 }
 
 function mensagensOk(pegarMsgs){
-    
+    console.log(pegarMsgs.data);
     elementos = "";
     console.log('Limpando as mensagens...');
 
@@ -27,7 +28,7 @@ function mensagensOk(pegarMsgs){
         nomeB = pegarMsgs.data[i].to;
         textoMsg = pegarMsgs.data[i].text;
 
-        estrutura = document.querySelector('ul');
+        estrutura = document.querySelector('.mensagenschat');
         if (pegarMsgs.data[i].type === "status"){
             elementos = elementos+`
             <li class="entrou-saiu" data-test="message">
@@ -47,12 +48,18 @@ function mensagensOk(pegarMsgs){
                     <p class="texto"><span class="hora">(${horarioMsg})</span><span>${nomeA}</span> reservadamente para <span>${nomeB}</span>: ${textoMsg}</p>
                 </li>
                 `;
+            } else if (nomeA === nome && visibili === "Reservadamente"){
+                elementos = elementos+`
+                <li class="reservado" data-test="message">
+                    <p class="texto"><span class="hora">(${horarioMsg})</span><span>${nomeA}</span> reservadamente para <span>${nomeB}</span>: ${textoMsg}</p>
+                </li>
+                `;
             }
         }
     }
     if (comparaNovo[0] !== horarioMsg || comparaNovo[1] !== nomeA || comparaNovo[2] !== textoMsg){
         estrutura.innerHTML = elementos;
-        document.querySelector('ul li:last-child').scrollIntoView();
+        document.querySelector('.mensagenschat li:last-child').scrollIntoView();
         comparaNovo[0]=pegarMsgs.data[99].time;
         comparaNovo[1]=pegarMsgs.data[99].from;
         comparaNovo[2]=pegarMsgs.data[99].text;
@@ -75,7 +82,9 @@ function sendErro(){
 function sendMsg(){
 
     const btnSendMsg = document.querySelector('.rodape input');
-        
+    
+
+
     conteudoMsg = {
         from: nome,
         to: paraQuem,
@@ -146,7 +155,7 @@ function processaResposta(resposta){
     document.querySelector('.tela-entrada').classList.add('esconder');
 
     console.log(nome +' entrou na sala!')
-    document.querySelector('ul').classList.remove('esconder');
+    document.querySelector('.mensagenschat').classList.remove('esconder');
 
     const pegarMensagens = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
     console.log('Exibindo histórico de mensagens!')
@@ -178,6 +187,107 @@ function telaInicial(){
     if (nome!== ''){
         document.querySelector('.tela-entrada input').value = "";
         entrarNaSala();
+    }
+
+}
+
+function fecharMenu(){
+
+    document.querySelector('.menu-lateral').classList.add('esconder');
+
+}
+
+function falhaListaUser(){
+    alert('Erro ao carregar lista de usuários online.');
+}
+
+function mostrarListaUser(usersOnline){
+    let mostraUser = usersOnline.data;
+    let montaListaUser = document.querySelector('.donline ul');
+    console.log(mostraUser);
+
+    montaListaUser.innerHTML = `
+    <li onclick="selecionarUsuario(this)">
+        <div class="left">
+            <ion-icon name="people"></ion-icon>
+            <span>Todos</span>
+        </div>
+        <div class="right esconder">
+            <ion-icon name="checkmark-sharp"></ion-icon>
+        </div>
+    </li>`;
+
+    for (let i = 0; i < mostraUser.length; i++){
+        let nomeUserOnline = usersOnline.data[i].name;
+        if (nomeUserOnline !== nome){
+        montaListaUser.innerHTML = montaListaUser.innerHTML + `
+        <li onclick="selecionarUsuario(this)">
+            <div class="left">
+                <ion-icon name="people"></ion-icon>
+                <span>${nomeUserOnline}</span>
+            </div>
+            <div class="right esconder">
+                <ion-icon name="checkmark-sharp"></ion-icon>
+            </div>
+        </li>
+        `
+        }
+    }
+}
+
+function userOn(){
+    
+    const usuarioson = axios.get('https://mock-api.driven.com.br/api/v6/uol/participants');
+
+    usuarioson.then(mostrarListaUser);
+    usuarioson.catch(falhaListaUser);
+
+}
+
+function abrirMenu(){
+
+    userOn();
+    document.querySelector('.menu-lateral').classList.remove('esconder');
+
+}
+
+function selecionarVisibilidade(selecaoVisivel){
+
+    const selecaoAntes = document.querySelector('.visibilidade .selecionado');
+
+    if (selecaoAntes !== null){
+        selecaoAntes.classList.remove('selecionado');
+    };
+
+    visibili = selecaoVisivel.querySelector('span').innerHTML;
+
+    nomeRodape();
+    selecaoVisivel.querySelector('.right').classList.add('selecionado');
+}
+
+function selecionarUsuario(selecaoUsuario){
+
+    const selecaoAntes = document.querySelector('.donline .selecionado');
+
+    if (selecaoAntes !== null){
+        selecaoAntes.classList.remove('selecionado');
+    };
+
+    selecaoUsuario.querySelector('.right').classList.add('selecionado');
+
+    paraQuem = selecaoUsuario.querySelector('span').innerHTML;
+    nomeRodape();
+    
+}
+
+function nomeRodape(){
+
+    document.querySelector('.rodape-esquerda p').innerHTML = `Enviando para ${paraQuem} (${visibili})`;
+
+    if (visibili === "Público"){
+        tipo = "message";
+    } else {
+        tipo = "private_message";
     }
 
 }
