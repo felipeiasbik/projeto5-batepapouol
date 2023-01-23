@@ -14,6 +14,10 @@
                 <img alt="Logo Bate-Papo UOL" src="img/logo-entrada.png">
                 <input type="text" placeholder="Digite seu nome" onfocus="this.value='';" data-test="input-name">
                 <button data-test="send-name" class="sendbtnEntrada" onclick="telaInicial()">Entrar</button>
+                <div class="load esconder" >
+                    <img alt="Carregando" src="img/loading.gif">
+                    <p>Entrando...</p>
+                </div>
             </div>
             <div class="menu-lateral esconder">
                 <div class="menu-lateral-esquerdo" onclick="fecharMenu()"></div>
@@ -27,22 +31,22 @@
                     <div class="visibilidade">
                         <p>Escolha a visibilidade:</p>
                         <ul>
-                            <li onclick="selecionarVisibilidade(this)">
+                            <li data-test="public" onclick="selecionarVisibilidade(this)">
                                 <div class="left">
                                     <ion-icon name="lock-open"></ion-icon>
                                     <span>Público</span>
                                 </div>
                                 <div class="right esconder">
-                                    <ion-icon name="checkmark-sharp"></ion-icon>
+                                    <ion-icon data-test="check" name="checkmark-sharp"></ion-icon>
                                 </div>
                             </li>
-                            <li onclick="selecionarVisibilidade(this)">
+                            <li data-test="private" onclick="selecionarVisibilidade(this)">
                                 <div class="left">
                                     <ion-icon name="lock-closed"></ion-icon>
                                     <span>Reservadamente</span>
                                 </div>
                                 <div class="right esconder">
-                                    <ion-icon name="checkmark-sharp"></ion-icon>
+                                    <ion-icon data-test="check" name="checkmark-sharp"></ion-icon>
                                 </div>
                             </li>
                         </ul>
@@ -51,7 +55,7 @@
             </div>
             <div class="cabecalho">
                 <img alt="Logo Bate-Papo UOL" src="img/logo.png">
-                <ion-icon onclick="abrirMenu()" name="people"></ion-icon>
+                <ion-icon data-test="open-participants" onclick="abrirMenu()" name="people"></ion-icon>
             </div>
             <ul class="mensagenschat esconder">
                 
@@ -59,7 +63,7 @@
             <div class="rodape">
                 <div class="rodape-esquerda">
                     <input type="text" required placeholder="Escreva aqui..." onfocus="this.value='';" data-test="input-message">
-                    <p></p>
+                    <p data-test="recipient">Enviando para Todos (Público)</p>
                 </div>
                 <button data-test="send-message" class="sendbtn" onclick="sendMsg()"><ion-icon name="paper-plane-outline"></ion-icon></button>
             </div>

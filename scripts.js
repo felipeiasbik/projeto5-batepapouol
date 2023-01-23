@@ -42,13 +42,7 @@ function mensagensOk(pegarMsgs){
             </li>
             `;
         } else {
-            if (nomeB === nome){
-                elementos = elementos+`
-                <li class="reservado" data-test="message">
-                    <p class="texto"><span class="hora">(${horarioMsg})</span><span>${nomeA}</span> reservadamente para <span>${nomeB}</span>: ${textoMsg}</p>
-                </li>
-                `;
-            } else if (nomeA === nome && visibili === "Reservadamente"){
+            if (nomeB === nome || nomeA === nome){
                 elementos = elementos+`
                 <li class="reservado" data-test="message">
                     <p class="texto"><span class="hora">(${horarioMsg})</span><span>${nomeA}</span> reservadamente para <span>${nomeB}</span>: ${textoMsg}</p>
@@ -83,7 +77,10 @@ function sendMsg(){
 
     const btnSendMsg = document.querySelector('.rodape input');
     
-
+    if (tipo == "private_message" && paraQuem === "Todos"){
+        alert('Não é possível enviar mensagem reservada para todos');
+        return;
+    }
 
     conteudoMsg = {
         from: nome,
@@ -147,7 +144,7 @@ function meustatus(){
 
 function processaRespostaErro(erro){
     alert('Este nome já está em uso. Por favor, digite um outro nome.');
-    entrarNaSala();
+    window.location.reload();
 }
 
 function processaResposta(resposta){
@@ -165,11 +162,16 @@ function processaResposta(resposta){
     
     setInterval(meustatus, 5000);
     setInterval(mostrarSala,3000);
+    setInterval(userOn,10000);
 }
 
 function entrarNaSala(){
     //nome = prompt('Qual é o seu nome?');
     const promise = axios.post('https://mock-api.driven.com.br/api/v6/uol/participants', {name: nome});
+
+    document.querySelector('.tela-entrada button').classList.add('esconder');
+    document.querySelector('.tela-entrada input').classList.add('esconder');
+    document.querySelector('.tela-entrada .load').classList.remove('esconder');
 
     promise.then(processaResposta);
     promise.catch(processaRespostaErro);
@@ -207,13 +209,13 @@ function mostrarListaUser(usersOnline){
     console.log(mostraUser);
 
     montaListaUser.innerHTML = `
-    <li onclick="selecionarUsuario(this)">
+    <li onclick="selecionarUsuario(this)" data-test="all">
         <div class="left">
             <ion-icon name="people"></ion-icon>
             <span>Todos</span>
         </div>
         <div class="right esconder">
-            <ion-icon name="checkmark-sharp"></ion-icon>
+            <ion-icon data-test="check" name="checkmark-sharp"></ion-icon>
         </div>
     </li>`;
 
@@ -221,13 +223,13 @@ function mostrarListaUser(usersOnline){
         let nomeUserOnline = usersOnline.data[i].name;
         if (nomeUserOnline !== nome){
         montaListaUser.innerHTML = montaListaUser.innerHTML + `
-        <li onclick="selecionarUsuario(this)">
+        <li onclick="selecionarUsuario(this)" data-test="participant">
             <div class="left">
                 <ion-icon name="people"></ion-icon>
                 <span>${nomeUserOnline}</span>
             </div>
             <div class="right esconder">
-                <ion-icon name="checkmark-sharp"></ion-icon>
+                <ion-icon data-test="check" name="checkmark-sharp"></ion-icon>
             </div>
         </li>
         `
